@@ -376,106 +376,119 @@ async function upload2(e: any) {
 
   }
 
-  function compare() {
 
-    const diff: any[] = []
+function compare() {
 
-    const map2 = new Map()
+  const diff: any[] = []
 
-    // MAP FILE PHẢI
-    data2.forEach((r2) => {
+  const map2 = new Map()
 
-      const key =
-        buildKey(r2)
+  // MAP FILE PHẢI
+  data2.forEach((r2) => {
 
-      map2.set(key, r2)
+    const key =
+      buildKey(r2)
 
-    })
+    map2.set(key, r2)
 
-    // DUYỆT FILE TRÁI
-    data1.forEach((r1, index) => {
+  })
 
-      const key =
-        buildKey(r1)
+  // DUYỆT FILE TRÁI
+  data1.forEach((r1, index) => {
 
-      const r2 =
-        map2.get(key)
+    const key =
+      buildKey(r1)
 
-      const stt =
-        r1['STT'] ||
-        index + 1
+    const r2 =
+      map2.get(key)
 
-      const mappingInfo =
-        buildMappingInfo(
-          r1,
-          r2 || {}
-        )
+    const stt =
+      r1['STT'] ||
+      index + 1
 
-      // KHÔNG TỒN TẠI
-      if (!r2) {
-
-        diff.push({
-          row: stt,
-          mapping: mappingInfo,
-          column: 'KEY',
-          file1: key,
-          file2: 'Không tồn tại',
-        })
-
-        return
-
-      }
-
-      // SO SÁNH CỘT
-      Object.entries(mapping).forEach(
-        ([col1, col2]) => {
-
-          if (!col2) return
-
-          // KHÔNG SO SÁNH STT
-          if (
-            normalize(col1) === 'stt'
-          ) {
-            return
-          }
-
-          const v1 =
-            processValue(
-              String(col1),
-              r1[col1]
-            )
-
-          const v2 =
-            processValue(
-              String(col2),
-              r2[col2]
-            )
-
-          if (v1 !== v2) {
-
-            diff.push({
-              row: stt,
-              mapping: mappingInfo,
-              column: `${col1} ↔ ${col2}`,
-              file1: v1,
-              file2: v2,
-            })
-
-          }
-
-        }
+    const mappingInfo =
+      buildMappingInfo(
+        r1,
+        r2 || {}
       )
 
-    })
+    // KHÔNG TỒN TẠI
+    if (!r2) {
 
-    diff.sort((a, b) => {
-       return Number(a.row) - Number(b.row)
-       })
-    setResults(diff)
+      diff.push({
+        row: stt,
+        mapping: mappingInfo,
+        column: 'KEY',
+        file1: key,
+        file2: 'Không tồn tại',
+      })
 
-  }
+      return
 
-  // EXPORT EXCEL
+    }
+
+    // SO SÁNH CỘT
+    Object.entries(mapping).forEach(
+      ([col1, col2]) => {
+
+        const c1 =
+          String(col1)
+
+        const c2 =
+          String(col2)
+
+        if (!c2) return
+
+        // KHÔNG SO SÁNH STT
+        if (
+          normalize(c1) === 'stt'
+        ) {
+          return
+        }
+
+        const v1 =
+          processValue(
+            c1,
+            r1[c1]
+          )
+
+        const v2 =
+          processValue(
+            c2,
+            r2[c2]
+          )
+
+        if (v1 !== v2) {
+
+          diff.push({
+            row: stt,
+            mapping: mappingInfo,
+            column: `${c1} ↔ ${c2}`,
+            file1: v1,
+            file2: v2,
+          })
+
+        }
+
+      }
+    )
+
+  })
+
+  // SORT DÒNG
+  diff.sort((a, b) => {
+
+    return (
+      Number(a.row) -
+      Number(b.row)
+    )
+
+  })
+
+  setResults(diff)
+
+}
+
   function exportExcel() {
 
     const ws =
