@@ -526,7 +526,7 @@ function compare() {
           <div className="bg-blue-50 border-2 border-blue-300 rounded-2xl p-6">
 
             <h2 className="text-xl font-bold mb-4 text-blue-700">
-              FILE BÊN TRÁI
+              FILE HIS
             </h2>
 
             <input
@@ -545,7 +545,7 @@ function compare() {
           <div className="bg-green-50 border-2 border-green-300 rounded-2xl p-6">
 
             <h2 className="text-xl font-bold mb-4 text-green-700">
-              FILE BÊN PHẢI
+              FILE BHXH
             </h2>
 
             <input
